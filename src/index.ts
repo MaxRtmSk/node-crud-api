@@ -1,30 +1,41 @@
 import http from "http";
 import dotenv from "dotenv";
-import url from "url";
-
-import { users } from "./memory-db";
+import { getBody } from "./middleware/getBody";
+import { get, post, put, deletet } from "./routers/index";
 
 dotenv.config();
 
 const PORT = process.env.PORT ?? 3000;
 
-console.log();
-
 const server = http.createServer();
 
-server.on("request", (request, response) => {
-  const urlparse = request.url ? url.parse(request.url, true) : null;
+server.on("request", (request: any, response) => {
+  //   const urlparse = request.url ? url.parse(request.url, true) : null;
+  request.query = new URL(request.url, `http://${request.headers.host}`);
 
   try {
-    if (urlparse?.pathname === "/api/users" && request.method === "GET") {
-      response.writeHead(200, { "Content-Type": "application/json" });
-      response.end(JSON.stringify(users, null, 2));
-      return;
-    }
+    switch (request.method) {
+      case "GET":
+        getBody(request, response, get);
+        break;
 
-    response.statusCode = 500;
-    response.write("500: Server Error");
-    response.end();
+      case "POST":
+        getBody(request, response, post);
+        break;
+
+      case "PUT":
+        getBody(request, response, put);
+        break;
+
+      case "DELETE":
+        getBody(request, response, deletet);
+        break;
+
+      default:
+        response.statusCode = 404;
+        response.write("NOT FOUND");
+        response.end();
+    }
   } catch (error) {
     console.log(error);
   }
