@@ -38,6 +38,9 @@ server.on("request", (request: any, response) => {
     }
   } catch (error) {
     console.log(error);
+    response.statusCode = 500;
+    response.write("Server error");
+    response.end();
   }
 });
 
