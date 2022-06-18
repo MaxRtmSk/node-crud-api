@@ -16,7 +16,8 @@ class UserController {
 
   getById(request: any, response: any) {
     try {
-      const id = request.url.split("/")[2];
+      const id = request.url.split("/")[3];
+
       if (!checkIfValidUUID(id)) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
@@ -82,7 +83,7 @@ class UserController {
 
   update(request: any, response: any) {
     try {
-      const id = request.url.split("/")[2];
+      const id = request.url.split("/")[3];
       if (!checkIfValidUUID(id)) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
@@ -119,7 +120,7 @@ class UserController {
 
   remove(request: any, response: any) {
     try {
-      const id = request.url.split("/")[2];
+      const id = request.url.split("/")[3];
       if (!checkIfValidUUID(id)) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");

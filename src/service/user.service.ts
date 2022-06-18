@@ -17,16 +17,18 @@ class UserService {
     return users[users.length - 1];
   };
 
-  update = (id: any, updatePerson: any) => {
+  update = (id: any, updateUser: any) => {
     const findPerson = this.getById(id);
     if (!findPerson) return false;
+
     users.forEach((user: any, index: number) => {
       if (user.id === id) {
-        users[index].name = updatePerson.name;
-        users[index].age = updatePerson.age;
-        users[index].hobbies = updatePerson.hobbies;
+        users[index].username = updateUser.username;
+        users[index].age = updateUser.age;
+        users[index].hobbies = updateUser.hobbies;
       }
     });
+
     return this.getById(id);
   };
 
