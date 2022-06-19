@@ -10,7 +10,5 @@ export const route = (route: any, request: any): any => {
       url[3] !== "",
   };
 
-  console.log(route);
-
   return routers[route];
 };

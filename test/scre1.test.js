@@ -1,7 +1,14 @@
+const dotenv = require("dotenv");
 const supertest = require("supertest");
 const { routes } = require("./routes");
 
-const request = supertest("http://localhost:3001");
+dotenv.config();
+
+const host = process.env.PORT
+  ? `localhost:${process.env.PORT}`
+  : "localhost:3000";
+
+const request = supertest(host);
 
 describe("CRUD", () => {
   describe("GET", () => {

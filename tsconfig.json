@@ -20,9 +20,10 @@
     "noUnusedParameters": true,
     "importsNotUsedAsValues": "error",
     "checkJs": true,
+    "resolveJsonModule": true,
     // Everything below are custom changes for this app
     "allowJs": true,
     "outDir": "dist"
   },
-  "include": ["./src/**/*", "./__tests__/**/*"]
+  "include": ["./src/**/*", "./__tests__/**/*", "./src/**/*.json"]
 }

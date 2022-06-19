@@ -6,6 +6,7 @@
   "scripts": {
     "start:dev": "nodemon .",
     "start:prod": "rm -rf dist/ && tsc --project . && node dist/index.js",
+    "start:multi": "rm -rf dist/ && tsc --project . && cross-env MULTI=true node dist/index.js",
     "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "repository": {

@@ -10,6 +10,7 @@ class UserController {
       response.write(JSON.stringify(result));
       response.end();
     } catch (error) {
+      console.log("errror", error);
       throw new Error();
     }
   }

@@ -14,6 +14,7 @@ export const get = (request: any, response: any) => {
     response.write(`NOT FOUND ${request.query}`);
     response.end();
   } catch (error) {
+    console.log("error", error);
     response.statusCode = 500;
     response.write("500: Server Error");
     response.end();
