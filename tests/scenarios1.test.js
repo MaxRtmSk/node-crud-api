@@ -22,7 +22,7 @@ const host = process.env.PORT
 
 const request = supertest(host);
 
-describe("1 scenarios", () => {
+describe("1 scenarios: CRUD", () => {
   let userId = null;
 
   it("Get all records with a GET api/users request (an empty array is expected)", async () => {

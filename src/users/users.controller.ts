@@ -2,6 +2,7 @@ import { userService } from "./users.service";
 import { validate as uuidValidate } from "uuid";
 import type { ServerController } from "../types/app.types";
 import type { CreateUserDto } from "./dto/create-user.dto";
+import { isArrayOfStrings } from "../helpers/isArrayOfStrings";
 
 class UserController {
   getAll: ServerController = async (_, response) => {
@@ -24,7 +25,7 @@ class UserController {
       if ((id && !uuidValidate(id)) || !id) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
-        response.write(JSON.stringify("UUID not true"));
+        response.write(JSON.stringify("Not valid UUID"));
         response.end();
         return;
       }
@@ -57,7 +58,7 @@ class UserController {
         typeof username !== "string" ||
         age === undefined ||
         typeof age !== "number" ||
-        hobbies === undefined
+        !isArrayOfStrings(hobbies)
       ) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
@@ -80,7 +81,7 @@ class UserController {
       response.end();
       return;
     } catch (error) {
-      throw new Error();
+      throw error;
     }
   };
 
@@ -91,11 +92,26 @@ class UserController {
       if ((id && !uuidValidate(id)) || !id) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
-        response.write(JSON.stringify("UUID not true"));
+        response.write(JSON.stringify("Not valid UUID"));
         response.end();
         return;
       }
+
       const { username, age, hobbies } = request.body;
+
+      if (
+        username === undefined ||
+        typeof username !== "string" ||
+        age === undefined ||
+        typeof age !== "number" ||
+        !isArrayOfStrings(hobbies)
+      ) {
+        response.statusCode = 400;
+        response.setHeader("Content-Type", "application/json");
+        response.write(JSON.stringify("Does not contain required fields"));
+        response.end();
+        return;
+      }
 
       const data = {
         username,
@@ -129,7 +145,7 @@ class UserController {
       if ((id && !uuidValidate(id)) || !id) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
-        response.write(JSON.stringify("UUID not true"));
+        response.write(JSON.stringify("Not valid UUID"));
         response.end();
         return;
       }
