@@ -53,11 +53,11 @@ class UserService {
     const jsonString = JSON.stringify([...users]);
     const buffer = Buffer.from(jsonString);
 
-    fs.writeFile(users_file_path, buffer, (e) => {
-      console.log(e);
-    });
+    fs.writeFileSync(users_file_path, buffer);
 
-    return this.getById(id);
+    const result = this.getById(id);
+
+    return result;
   };
 
   remove = (id: any) => {
