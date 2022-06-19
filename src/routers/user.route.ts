@@ -1,7 +1,15 @@
-export const route = (route: any, request: any): any => {
-  const url = request.url.split("/");
+import type { IServerRequest } from "../types/app.types";
 
-  const routers: any = {
+export const route = (
+  route: "/api/users" | "/api/users/:id",
+  request: IServerRequest
+): boolean => {
+  const url = request.url ? request.url.split("/") : "";
+
+  const routers: {
+    "/api/users": boolean;
+    "/api/users/:id": boolean;
+  } = {
     "/api/users": url.length === 3 && url[1] === "api" && url[2] === "users",
     "/api/users/:id":
       url.length === 4 &&

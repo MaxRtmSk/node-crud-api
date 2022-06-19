@@ -1,10 +1,12 @@
-import { checkIfValidUUID } from "../helpers/checkIfValidUUID";
-import { userService } from "../service/user.service";
+import { userService } from "./users.service";
+import { validate as uuidValidate } from "uuid";
+import type { ServerController } from "../types/app.types";
+import type { CreateUserDto } from "./dto/create-user.dto";
 
 class UserController {
-  getAll(_: any, response: any) {
+  getAll: ServerController = async (_, response) => {
     try {
-      const result = userService.getAll();
+      const result = await userService.getAll();
       response.statusCode = 200;
       response.setHeader("Content-Type", "application/json");
       response.write(JSON.stringify(result));
@@ -13,20 +15,20 @@ class UserController {
       console.log("errror", error);
       throw new Error();
     }
-  }
+  };
 
-  getById(request: any, response: any) {
+  getById: ServerController = async (request, response) => {
     try {
-      const id = request.url.split("/")[3];
+      const id = request.url ? request.url.split("/")[3] : null;
 
-      if (!checkIfValidUUID(id)) {
+      if ((id && !uuidValidate(id)) || !id) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
         response.write(JSON.stringify("UUID not true"));
         response.end();
         return;
       }
-      const result = userService.getById(id);
+      const result = await userService.getById(id);
 
       if (result === undefined) {
         response.statusCode = 404;
@@ -44,9 +46,9 @@ class UserController {
     } catch (error) {
       throw new Error();
     }
-  }
+  };
 
-  create(request: any, response: any) {
+  create: ServerController = async (request, response) => {
     try {
       const { username, age, hobbies } = request.body;
 
@@ -64,13 +66,13 @@ class UserController {
         return;
       }
 
-      const data = {
+      const data: CreateUserDto = {
         username,
         age,
         hobbies,
       };
 
-      const result = userService.create(data);
+      const result = await userService.create(data);
 
       response.statusCode = 201;
       response.setHeader("Content-Type", "application/json");
@@ -80,12 +82,13 @@ class UserController {
     } catch (error) {
       throw new Error();
     }
-  }
+  };
 
-  update(request: any, response: any) {
+  update: ServerController = async (request, response) => {
     try {
-      const id = request.url.split("/")[3];
-      if (!checkIfValidUUID(id)) {
+      const id = request.url ? request.url.split("/")[3] : null;
+
+      if ((id && !uuidValidate(id)) || !id) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
         response.write(JSON.stringify("UUID not true"));
@@ -100,7 +103,7 @@ class UserController {
         hobbies,
       };
 
-      const result = userService.update(id, data);
+      const result = await userService.update(id, data);
       if (result === false) {
         response.statusCode = 404;
         response.setHeader("Content-Type", "application/json");
@@ -117,12 +120,13 @@ class UserController {
     } catch (error) {
       throw new Error();
     }
-  }
+  };
 
-  remove(request: any, response: any) {
+  remove: ServerController = async (request, response) => {
     try {
-      const id = request.url.split("/")[3];
-      if (!checkIfValidUUID(id)) {
+      const id = request.url ? request.url.split("/")[3] : null;
+
+      if ((id && !uuidValidate(id)) || !id) {
         response.statusCode = 400;
         response.setHeader("Content-Type", "application/json");
         response.write(JSON.stringify("UUID not true"));
@@ -130,7 +134,7 @@ class UserController {
         return;
       }
 
-      const result = userService.remove(id);
+      const result = await userService.remove(id);
       if (result) {
         response.statusCode = 204;
         response.setHeader("Content-Type", "application/json");
@@ -146,7 +150,7 @@ class UserController {
     } catch (error) {
       throw new Error();
     }
-  }
+  };
 }
 
 export const userController = new UserController();

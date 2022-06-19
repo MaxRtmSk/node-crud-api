@@ -1,4 +1,14 @@
-export const getBody = (request: any, response: any, next: any) => {
+import type {
+  IServerRequest,
+  ServerMethodHandler,
+  IServerResponse,
+} from "../types/app.types";
+
+export const getBody = async (
+  request: IServerRequest,
+  response: IServerResponse,
+  next: ServerMethodHandler
+) => {
   try {
     let data: any = [];
 
@@ -6,15 +16,15 @@ export const getBody = (request: any, response: any, next: any) => {
       data.push(dataChunk);
     });
 
-    request.on("end", () => {
+    request.on("end", async () => {
       request.body = Buffer.concat(data).toString();
       if (request.headers["content-type"] === "application/json") {
         request.body = JSON.parse(request.body);
       }
 
-      next(request, response);
+      await next(request, response);
     });
   } catch (error) {
-    throw new Error();
+    throw error;
   }
 };

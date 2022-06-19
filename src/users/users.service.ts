@@ -1,26 +1,28 @@
 import { randomUUID } from "crypto";
-// import users from "../memory-db.json";
 import fs from "fs";
 import path from "path";
+import type { CreateUserDto } from "./dto/create-user.dto";
+import type { UpdateUserDto } from "./dto/update-user.dto";
+import type { IUser } from "./interfaces/user.interface";
 
 const users_file_path = path.join(__dirname, "../memory-db.json");
 
 class UserService {
-  getAll = () => {
+  getAll = async () => {
     const jsonString = fs.readFileSync(users_file_path);
     const users = JSON.parse(jsonString.toString());
     return users;
   };
 
-  getById = (id: any) => {
+  getById = async (id: string) => {
     const jsonString = fs.readFileSync(users_file_path);
     const users = JSON.parse(jsonString.toString());
-    return users.find((user: any) => user.id === id);
+    return users.find((user: IUser) => user.id === id);
   };
 
-  create = (data: any) => {
-    const id: any = randomUUID();
-    const new_user: any = { id, ...data };
+  create = async (data: CreateUserDto) => {
+    const id: string = randomUUID();
+    const new_user: IUser = { id, ...data };
 
     const readJsonString = fs.readFileSync(users_file_path);
     const users = JSON.parse(readJsonString.toString());
@@ -35,14 +37,14 @@ class UserService {
     return new_user;
   };
 
-  update = (id: any, updateUser: any) => {
+  update = async (id: string, updateUser: UpdateUserDto) => {
     const findPerson = this.getById(id);
     if (!findPerson) return false;
 
     const readJsonString = fs.readFileSync(users_file_path);
     const users = JSON.parse(readJsonString.toString());
 
-    users.forEach((user: any, index: number) => {
+    users.forEach((user: IUser, index: number) => {
       if (user.id === id) {
         users[index].username = updateUser.username;
         users[index].age = updateUser.age;
@@ -60,11 +62,11 @@ class UserService {
     return result;
   };
 
-  remove = (id: any) => {
+  remove = async (id: string) => {
     const readJsonString = fs.readFileSync(users_file_path);
     const users = JSON.parse(readJsonString.toString());
 
-    const removeIndex = users.map((user: any) => user.id).indexOf(id);
+    const removeIndex = users.map((user: IUser) => user.id).indexOf(id);
     if (removeIndex === -1) {
       return false;
     }
