@@ -25,5 +25,5 @@
     "allowJs": true,
     "outDir": "dist"
   },
-  "include": ["./src/**/*", "src/tests/**/*", "./src/**/*.json"]
+  "include": ["./src/**/*", "./src/**/*.json"]
 }
